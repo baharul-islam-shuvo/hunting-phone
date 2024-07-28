@@ -11,7 +11,19 @@ let displayPhones = phones => {
 
     let phoneContainer = document.getElementById('phone-container');
     // clear phone container card before add new card
-    phoneContainer.textContent= '';
+    phoneContainer.textContent = '';
+
+    // active show all button condition
+    let showAllContainer = document.getElementById('show-all-container');
+    if(phones.length>12){
+        showAllContainer.classList.remove('hidden');
+    }
+    else{
+        showAllContainer.classList.add('hidden');
+    }
+
+    // items display limit
+    phones = phones.slice(0,12);
 
     phones.forEach(phone => {
         console.log(phone);
@@ -29,7 +41,7 @@ let displayPhones = phones => {
                         <button class="btn btn-primary">Buy Now</button>
                       </div>
                     </div>`
-                    phoneContainer.appendChild(phoneCard);
+        phoneContainer.appendChild(phoneCard);
     });
 }
 
@@ -38,5 +50,11 @@ let handleSearch = () => {
     let searchField = document.getElementById('search-field');
     let searchText = searchField.value;
     console.log(searchText);
+    loadPhone(searchText);
+}
+
+let handleSearch2 = () => {
+    let searchField = document.getElementById('search-field2');
+    let searchText = searchField.value;
     loadPhone(searchText);
 }
