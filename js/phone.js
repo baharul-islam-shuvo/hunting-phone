@@ -1,13 +1,13 @@
-let loadPhone = async (searchText) => {
+let loadPhone = async (searchText, isShowAll) => {
     let res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     let data = await res.json();
     let phones = data.data;
     // console.log(data.data);
-    displayPhones(phones);
+    displayPhones(phones, isShowAll);
 }
 
-let displayPhones = phones => {
-    // console.log(phones);
+let displayPhones = (phones, isShowAll) => {
+    console.log(phones);
 
     let phoneContainer = document.getElementById('phone-container');
     // clear phone container card before add new card
@@ -15,15 +15,17 @@ let displayPhones = phones => {
 
     // active show all button condition
     let showAllContainer = document.getElementById('show-all-container');
-    if(phones.length>12){
+    if (phones.length > 12 && !isShowAll) {
         showAllContainer.classList.remove('hidden');
     }
-    else{
+    else {
         showAllContainer.classList.add('hidden');
     }
 
     // items display limit
-    phones = phones.slice(0,12);
+    if(!isShowAll){
+        phones = phones.slice(0, 12);
+    }
 
     phones.forEach(phone => {
         console.log(phone);
@@ -49,27 +51,32 @@ let displayPhones = phones => {
 }
 
 // handle search button
-let handleSearch = () => {
+let handleSearch = (isShowAll) => {
     toggleLoadingSpinner(true);
     let searchField = document.getElementById('search-field');
     let searchText = searchField.value;
     console.log(searchText);
-    loadPhone(searchText);
+    loadPhone(searchText, isShowAll);
 }
 
-let handleSearch2 = () => {
-    toggleLoadingSpinner(true);
-    let searchField = document.getElementById('search-field2');
-    let searchText = searchField.value;
-    loadPhone(searchText);
-}
+// let handleSearch2 = () => {
+//     toggleLoadingSpinner(true);
+//     let searchField = document.getElementById('search-field2');
+//     let searchText = searchField.value;
+//     loadPhone(searchText);
+// }
 
-let toggleLoadingSpinner = (isLoading) =>{
+let toggleLoadingSpinner = (isLoading) => {
     let loadingSpinner = document.getElementById('loading-spinner');
-    if(isLoading){
+    if (isLoading) {
         loadingSpinner.classList.remove('hidden');
     }
-    else{
+    else {
         loadingSpinner.classList.add('hidden');
     }
+}
+
+// handle show all 
+let handleShowAll = () =>{
+    handleSearch(true);
 }
