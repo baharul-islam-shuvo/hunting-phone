@@ -1,4 +1,4 @@
-let loadPhone = async (searchText, isShowAll) => {
+let loadPhone = async (searchText='13', isShowAll) => {
     let res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     let data = await res.json();
     let phones = data.data;
@@ -7,7 +7,7 @@ let loadPhone = async (searchText, isShowAll) => {
 }
 
 let displayPhones = (phones, isShowAll) => {
-    console.log(phones);
+    // console.log(phones);
 
     let phoneContainer = document.getElementById('phone-container');
     // clear phone container card before add new card
@@ -28,7 +28,7 @@ let displayPhones = (phones, isShowAll) => {
     }
 
     phones.forEach(phone => {
-        console.log(phone);
+        // console.log(phone);
         let phoneCard = document.createElement('div');
         phoneCard.classList = `card bg-gray-100 p-4 shadow-xl`;
         phoneCard.innerHTML = `<figure>
@@ -39,8 +39,8 @@ let displayPhones = (phones, isShowAll) => {
                     <div class="card-body">
                       <h2 class="card-title">${phone.phone_name}</h2>
                       <p>If a dog chews shoes whose shoes does he choose?</p>
-                      <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Buy Now</button>
+                      <div class="card-actions justify-center">
+                        <button onclick="handleShowDetail('${phone.slug}')" class="btn btn-primary">Show Details</button>
                       </div>
                     </div>`
         phoneContainer.appendChild(phoneCard);
@@ -50,6 +50,39 @@ let displayPhones = (phones, isShowAll) => {
     toggleLoadingSpinner(false);
 }
 
+// show details
+let handleShowDetail = async (id) =>{
+    // console.log('show details',id);
+    // load data in show details
+    let res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
+    let data = await res.json();
+    let phone = data.data;
+
+    showPhoneDetails(phone);
+}
+
+let showPhoneDetails = (phone) =>{
+    console.log(phone);
+    let phoneName = document.getElementById('show-detail-phone-name');
+    phoneName.innerText= phone.name;
+
+
+    let showDetailContainer = document.getElementById('show-detail-container');
+    showDetailContainer.innerHTML= `
+        <img src="${phone.image}" alt="">
+        <p><span>Storage:</span>${phone?.mainFeatures?.storage}</p>
+        <p><span>Display Size:</span>${phone?.mainFeatures?.displaySize}</p>
+        <p><span>Chipset:</span>${phone?.mainFeatures?.chipSet}</p>
+        <p><span>Memory:</span>${phone?.mainFeatures?.memory}</p>
+        <p><span>Slug:</span>${phone?.slug}</p>
+        <p><span>Release Date:</span>${phone?.releaseDate}</p>
+        <p><span>Brand:</span>${phone?.brand}</p>
+        <p><span>Gps:</span>${phone?.others?.GPS}</p>
+    `
+
+    // show the modal
+    show_details_modal.showModal();
+}
 // handle search button
 let handleSearch = (isShowAll) => {
     toggleLoadingSpinner(true);
@@ -80,3 +113,5 @@ let toggleLoadingSpinner = (isLoading) => {
 let handleShowAll = () =>{
     handleSearch(true);
 }
+
+loadPhone();
