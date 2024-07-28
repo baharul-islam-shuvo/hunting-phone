@@ -77,7 +77,7 @@ let showPhoneDetails = (phone) =>{
         <p><span>Slug:</span>${phone?.slug}</p>
         <p><span>Release Date:</span>${phone?.releaseDate}</p>
         <p><span>Brand:</span>${phone?.brand}</p>
-        <p><span>Gps:</span>${phone?.others?.GPS}</p>
+        <p><span>Gps:</span>${phone?.others?.GPS || 'No GPS'}</p>
     `
 
     // show the modal
